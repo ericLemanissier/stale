@@ -172,8 +172,8 @@ class ExemptDraftPullRequest {
     // keep this for backward compatibility
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     pullRequestCallback) {
-        var _a;
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             if (this._issue.isPullRequest) {
                 if (this._options.exemptDraftPr) {
                     this._issueLogger.info(`The option ${this._issueLogger.createOptionLink(option_1.Option.ExemptDraftPr)} is enabled`);
@@ -348,13 +348,23 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -430,9 +440,9 @@ class IssuesProcessor {
             this.statistics = new statistics_1.Statistics();
         }
     }
-    processIssues(page = 1) {
-        var _a, _b;
-        return __awaiter(this, void 0, void 0, function* () {
+    processIssues() {
+        return __awaiter(this, arguments, void 0, function* (page = 1) {
+            var _a, _b;
             // get the next batch of issues
             const issues = yield this.getIssues(page);
             if (issues.length <= 0) {
@@ -474,8 +484,8 @@ class IssuesProcessor {
         });
     }
     processIssue(issue, labelsToAddWhenUnstale, labelsToRemoveWhenUnstale, labelsToRemoveWhenStale) {
-        var _a;
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             (_a = this.statistics) === null || _a === void 0 ? void 0 : _a.incrementProcessedItemsCount(issue);
             const issueLogger = new issue_logger_1.IssueLogger(issue);
             issueLogger.info(`Found this $$type last updated at: ${logger_service_1.LoggerService.cyan(issue.updated_at)}`);
@@ -672,8 +682,8 @@ class IssuesProcessor {
     }
     // Grab comments for an issue since a given date
     listIssueComments(issue, sinceDate) {
-        var _a;
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             // Find any comments since date on the given issue
             try {
                 this._consumeIssueOperation(issue);
@@ -694,8 +704,8 @@ class IssuesProcessor {
     }
     // grab issues from github in batches of 100
     getIssues(page) {
-        var _a;
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             try {
                 this.operations.consumeOperation();
                 const issueResult = yield this.client.rest.issues.listForRepo({
@@ -718,8 +728,8 @@ class IssuesProcessor {
     // returns the creation date of a given label on an issue (or nothing if no label existed)
     ///see https://developer.github.com/v3/activity/events/
     getLabelCreationDate(issue, label) {
-        var _a;
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             const issueLogger = new issue_logger_1.IssueLogger(issue);
             issueLogger.info(`Checking for label on this $$type`);
             this._consumeIssueOperation(issue);
@@ -742,8 +752,8 @@ class IssuesProcessor {
         });
     }
     getPullRequest(issue) {
-        var _a;
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             const issueLogger = new issue_logger_1.IssueLogger(issue);
             try {
                 this._consumeIssueOperation(issue);
@@ -854,8 +864,8 @@ class IssuesProcessor {
     }
     // Mark an issue as stale with a comment and a label
     _markStale(issue, staleMessage, staleLabel, skipMessage) {
-        var _a, _b, _c;
         return __awaiter(this, void 0, void 0, function* () {
+            var _a, _b, _c;
             const issueLogger = new issue_logger_1.IssueLogger(issue);
             issueLogger.info(`Marking this $$type as stale`);
             this.staleIssues.push(issue);
@@ -900,8 +910,8 @@ class IssuesProcessor {
     }
     // Close an issue based on staleness
     _closeIssue(issue, closeMessage, closeLabel) {
-        var _a, _b, _c;
         return __awaiter(this, void 0, void 0, function* () {
+            var _a, _b, _c;
             const issueLogger = new issue_logger_1.IssueLogger(issue);
             issueLogger.info(`Closing $$type for being stale`);
             this.closedIssues.push(issue);
@@ -960,8 +970,8 @@ class IssuesProcessor {
     }
     // Delete the branch on closed pull request
     _deleteBranch(issue) {
-        var _a;
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             const issueLogger = new issue_logger_1.IssueLogger(issue);
             issueLogger.info(`Delete
     branch from closed $
@@ -999,9 +1009,9 @@ class IssuesProcessor {
         });
     }
     // Remove a label from an issue or a pull request
-    _removeLabel(issue, label, isSubStep = false) {
-        var _a;
-        return __awaiter(this, void 0, void 0, function* () {
+    _removeLabel(issue_2, label_1) {
+        return __awaiter(this, arguments, void 0, function* (issue, label, isSubStep = false) {
+            var _a;
             const issueLogger = new issue_logger_1.IssueLogger(issue);
             issueLogger.info(`${isSubStep ? logger_service_1.LoggerService.white('├── ') : ''}Removing the label "${logger_service_1.LoggerService.cyan(label)}" from this $$type...`);
             this.removedLabelIssues.push(issue);
@@ -1097,8 +1107,8 @@ class IssuesProcessor {
         });
     }
     _addLabelsWhenUnstale(issue, labelsToAdd) {
-        var _a;
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             if (!labelsToAdd.length) {
                 return;
             }
@@ -1123,8 +1133,8 @@ class IssuesProcessor {
         });
     }
     _removeStaleLabel(issue, staleLabel) {
-        var _a;
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             const issueLogger = new issue_logger_1.IssueLogger(issue);
             issueLogger.info(`The $$type is no longer stale. Removing the stale label...`);
             yield this._removeLabel(issue, staleLabel);
@@ -1132,8 +1142,8 @@ class IssuesProcessor {
         });
     }
     _removeCloseLabel(issue, closeLabel) {
-        var _a;
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             const issueLogger = new issue_logger_1.IssueLogger(issue);
             issueLogger.info(`The $$type is not closed nor locked. Trying to remove the close label...`);
             if (!closeLabel) {
@@ -1297,13 +1307,23 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -1588,13 +1608,23 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -1743,13 +1773,23 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -2259,7 +2299,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.cleanLabel = void 0;
+exports.cleanLabel = cleanLabel;
 const lodash_deburr_1 = __importDefault(__nccwpck_require__(1601));
 /**
  * @description
@@ -2272,7 +2312,6 @@ const lodash_deburr_1 = __importDefault(__nccwpck_require__(1601));
 function cleanLabel(label) {
     return (0, lodash_deburr_1.default)(label === null || label === void 0 ? void 0 : label.toLowerCase());
 }
-exports.cleanLabel = cleanLabel;
 
 
 /***/ }),
@@ -2283,7 +2322,7 @@ exports.cleanLabel = cleanLabel;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getHumanizedDate = void 0;
+exports.getHumanizedDate = getHumanizedDate;
 function getHumanizedDate(date) {
     const year = date.getFullYear();
     let month = `${date.getMonth() + 1}`;
@@ -2296,7 +2335,6 @@ function getHumanizedDate(date) {
     }
     return [day, month, year].join('-');
 }
-exports.getHumanizedDate = getHumanizedDate;
 
 
 /***/ }),
@@ -2309,7 +2347,8 @@ exports.getHumanizedDate = getHumanizedDate;
 /// returns false if the dates are equal within the `equalityToleranceInSeconds` number of seconds
 /// otherwise returns true if `comparedDate` is after `date`
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.isDateEqualTo = exports.isDateMoreRecentThan = void 0;
+exports.isDateMoreRecentThan = isDateMoreRecentThan;
+exports.isDateEqualTo = isDateEqualTo;
 function isDateMoreRecentThan(date, comparedDate, equalityToleranceInSeconds = 0) {
     if (equalityToleranceInSeconds > 0) {
         const areDatesEqual = isDateEqualTo(date, comparedDate, equalityToleranceInSeconds);
@@ -2317,14 +2356,12 @@ function isDateMoreRecentThan(date, comparedDate, equalityToleranceInSeconds = 0
     }
     return date > comparedDate;
 }
-exports.isDateMoreRecentThan = isDateMoreRecentThan;
 function isDateEqualTo(date, otherDate, toleranceInSeconds) {
     const timestamp = date.getTime();
     const otherTimestamp = otherDate.getTime();
     const deltaInSeconds = Math.abs(timestamp - otherTimestamp) / 1000;
     return deltaInSeconds <= toleranceInSeconds;
 }
-exports.isDateEqualTo = isDateEqualTo;
 
 
 /***/ }),
@@ -2335,7 +2372,7 @@ exports.isDateEqualTo = isDateEqualTo;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.isValidDate = void 0;
+exports.isValidDate = isValidDate;
 /**
  * @description
  * Check if a date is valid
@@ -2353,7 +2390,6 @@ function isValidDate(date) {
     }
     return false;
 }
-exports.isValidDate = isValidDate;
 
 
 /***/ }),
@@ -2383,11 +2419,10 @@ exports.getSortField = getSortField;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.isBoolean = void 0;
+exports.isBoolean = isBoolean;
 function isBoolean(value) {
     return value === true || value === false;
 }
-exports.isBoolean = isBoolean;
 
 
 /***/ }),
@@ -2398,7 +2433,7 @@ exports.isBoolean = isBoolean;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.isLabeled = void 0;
+exports.isLabeled = isLabeled;
 const clean_label_1 = __nccwpck_require__(7752);
 /**
  * @description
@@ -2414,7 +2449,6 @@ function isLabeled(issue, label) {
         return (0, clean_label_1.cleanLabel)(label) === (0, clean_label_1.cleanLabel)(issueLabel.name);
     });
 }
-exports.isLabeled = isLabeled;
 
 
 /***/ }),
@@ -2425,11 +2459,10 @@ exports.isLabeled = isLabeled;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.isPullRequest = void 0;
+exports.isPullRequest = isPullRequest;
 function isPullRequest(issue) {
     return !!issue.pull_request;
 }
-exports.isPullRequest = isPullRequest;
 
 
 /***/ }),
@@ -2440,11 +2473,10 @@ exports.isPullRequest = isPullRequest;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.shouldMarkWhenStale = void 0;
+exports.shouldMarkWhenStale = shouldMarkWhenStale;
 function shouldMarkWhenStale(daysBeforeStale) {
     return daysBeforeStale >= 0;
 }
-exports.shouldMarkWhenStale = shouldMarkWhenStale;
 
 
 /***/ }),
@@ -2455,7 +2487,7 @@ exports.shouldMarkWhenStale = shouldMarkWhenStale;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.wordsToList = void 0;
+exports.wordsToList = wordsToList;
 /**
  * @description
  * Transform a string of comma separated words
@@ -2478,7 +2510,6 @@ function wordsToList(words) {
     }
     return words.split(',').map((word) => word.trim());
 }
-exports.wordsToList = wordsToList;
 
 
 /***/ }),
@@ -2504,13 +2535,23 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
